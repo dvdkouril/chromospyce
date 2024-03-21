@@ -10,7 +10,7 @@ import * as chs from "https://esm.sh/chromospace";
 
 /**
  * @typedef Model
- * @property {DataView} nparr_model
+ * @property {DataView} [nparr_model]
  * @property {TextFile} model
  * @property {string} delimiter
  */
@@ -30,6 +30,7 @@ export default {
 
     //~ see if there's a raw numpy array sent
     const rawChunk = model.get("nparr_model");
+
     if (rawChunk) {
       const rawChunkChunk = chs.parseNumpyArray(rawChunk, options);
       //~ create a scene
