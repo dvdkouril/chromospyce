@@ -9,6 +9,9 @@
       "DOM.Iterable"
     ]
   },
+  "fmt": {
+    "exclude": [".venv"]
+  },
   "lint": {
     "rules": {
       "exclude": [
