@@ -9,14 +9,10 @@
       "DOM.Iterable"
     ]
   },
-  "fmt": {
+  "lint": {
     "exclude": [".venv"]
   },
-  "lint": {
-    "rules": {
-      "exclude": [
-        "prefer-const"
-      ]
-    }
+  "fmt": {
+    "exclude": [".venv"]
   }
 }

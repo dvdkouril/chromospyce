@@ -34,7 +34,7 @@ export default {
     if (rawChunk) {
       const rawChunkChunk = chs.parseNumpyArray(rawChunk, options);
       //~ create a scene
-      let chromatinScene = {
+      const chromatinScene = {
         chunks: [rawChunkChunk],
         models: [],
       };
@@ -47,7 +47,7 @@ export default {
       );
 
       //~ create a scene
-      let chromatinScene = {
+      const chromatinScene = {
         chunks: [chsChunks],
         models: [],
       };
