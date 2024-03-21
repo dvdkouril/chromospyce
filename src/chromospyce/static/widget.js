@@ -1,13 +1,9 @@
-import type { RenderContext } from "@anywidget/types";
-import "./widget.css";
+import confetti from "https://esm.sh/canvas-confetti@1";
 
-/* Specifies attributes defined with traitlets in ../src/chromospyce/__init__.py */
-interface WidgetModel {
-	value: number;
-	/* Add your own */
-}
+/** @typedef {{ value: number }} Model */
 
-function render({ model, el }: RenderContext<WidgetModel>) {
+/** @type {import("npm:@anywidget/types").Render<Model>} */
+function render({ model, el }) {
 	let btn = document.createElement("button");
 	btn.classList.add("chromospyce-counter-button");
 	btn.innerHTML = `count is ${model.get("value")}`;
@@ -16,6 +12,7 @@ function render({ model, el }: RenderContext<WidgetModel>) {
 		model.save_changes();
 	});
 	model.on("change:value", () => {
+		confetti();
 		btn.innerHTML = `count is ${model.get("value")}`;
 	});
 	el.appendChild(btn);
