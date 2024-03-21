@@ -1,21 +1,48 @@
-import confetti from "https://esm.sh/canvas-confetti@1";
+import * as chs from "https://esm.sh/chromospace";
+    //import * as chs from "http://localhost:5173/src/main.ts";
 
-/** @typedef {{ value: number }} Model */
+    export default {
+      render({ model, el }) {
+        const options = {
+          center: true,
+          normalize: true,
+        };
+        
+        // const chsModel = chs.parse3dg(model.get("model").contents, options);
+        // const chsChunks = chs.parseXYZ(model.get("model").contents, ' ', options);
+        
+        const renderer = new chs.ChromatinBasicRenderer();
 
-/** @type {import("npm:@anywidget/types").Render<Model>} */
-function render({ model, el }) {
-	let btn = document.createElement("button");
-	btn.classList.add("chromospyce-counter-button");
-	btn.innerHTML = `count is ${model.get("value")}`;
-	btn.addEventListener("click", () => {
-		model.set("value", model.get("value") + 1);
-		model.save_changes();
-	});
-	model.on("change:value", () => {
-		confetti();
-		btn.innerHTML = `count is ${model.get("value")}`;
-	});
-	el.appendChild(btn);
-}
+        //~ see if there's a raw numpy array sent
+        const rawChunk = model.get("nparr_model");
+        if (rawChunk) {
+            const rawChunkChunk = chs.parseNumpyArray(rawChunk, options);
+            //~ create a scene
+            let chromatinScene = {
+                chunks: [rawChunkChunk],
+                models: [],
+            };
+            renderer.addScene(chromatinScene);
+        } else {
+        
+            const chsChunks = chs.parseXYZ(model.get("model").contents, model.get("delimiter"), options);
+            
+            //~ create a scene
+            let chromatinScene = {
+                chunks: [chsChunks],
+                models: [],
+            };
+            renderer.addScene(chromatinScene);
+        }
 
-export default { render };
+        //~ start frame loop (requestAnimationFrame)
+        renderer.startDrawing();
+
+        el.appendChild(renderer.getCanvasElement());
+
+        return () => {
+    		// Optionally cleanup
+            renderer.endDrawing();
+    	};
+      }
+    }
