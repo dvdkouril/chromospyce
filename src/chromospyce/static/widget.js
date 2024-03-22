@@ -11,6 +11,7 @@ import * as chs from "https://esm.sh/chromospace";
 /**
  * @typedef Model
  * @property {DataView} [nparr_model]
+ * @property {boolean} is_numpy
  * @property {TextFile} model
  * @property {string} delimiter
  */
@@ -29,9 +30,11 @@ export default {
     const renderer = new chs.ChromatinBasicRenderer();
 
     //~ see if there's a raw numpy array sent
+    const isNumpy = model.get("is_numpy");
     const rawChunk = model.get("nparr_model");
-
-    if (rawChunk) {
+    // if (rawChunk) {
+    if (isNumpy) {
+      console.log("numpy array was supplied!");
       const rawChunkChunk = chs.parseNumpyArray(rawChunk, options);
       //~ create a scene
       const chromatinScene = {
@@ -40,6 +43,7 @@ export default {
       };
       renderer.addScene(chromatinScene);
     } else {
+      console.log("normal file!");
       const chsChunks = chs.parseXYZ(
         model.get("model").contents,
         model.get("delimiter"),
