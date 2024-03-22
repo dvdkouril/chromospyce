@@ -23,4 +23,5 @@ class Widget(anywidget.AnyWidget):
     model = traitlets.Instance(pathlib.Path, default_value=pathlib.Path("/home")).tag(sync=True, to_json=text_file_serializer)
     delimiter = traitlets.Unicode(" ").tag(sync=True)
     nparr_model = traitlets.Bytes().tag(sync=True)
+    is_numpy = traitlets.Bool(False).tag(sync=True)
 
