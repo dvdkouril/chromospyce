@@ -24,40 +24,50 @@ export default {
       normalize: true,
     };
 
-    // const chsModel = chs.parse3dg(model.get("model").contents, options);
-    // const chsChunks = chs.parseXYZ(model.get("model").contents, ' ', options);
-
     const renderer = new chs.ChromatinBasicRenderer();
+    const chromatinScene = {
+      chunks: [],
+      models: [],
+    };
 
-    //~ see if there's a raw numpy array sent
-    const isNumpy = model.get("is_numpy");
-    const rawChunk = model.get("nparr_model");
-    // if (rawChunk) {
+    //~ process numpy
+    const structureNumpy = model.get("structure_nparray");
+    const isNumpy = (structureNumpy  != undefined && structureNumpy != null && structureNumpy.byteLength != 0);
     if (isNumpy) {
       console.log("numpy array was supplied!");
-      const rawChunkChunk = chs.parseNumpyArray(rawChunk, options);
-      //~ create a scene
-      const chromatinScene = {
-        chunks: [rawChunkChunk],
-        models: [],
-      };
-      renderer.addScene(chromatinScene);
-    } else {
-      console.log("normal file!");
-      const chsChunks = chs.parseXYZ(
-        model.get("model").contents,
+      const numpyChunk = chs.parseNumpyArray(structureNumpy , options);
+      chromatinScene.chunks.push(numpyChunk );
+    }
+
+    //~ process string
+    const structureString = model.get("structure_string");
+    if (structureString != "") {
+      console.log("string was supplied!");
+      const stringChunk = chs.parseXYZ(
+        structureString,
         model.get("delimiter"),
         options,
       );
-
-      //~ create a scene
-      const chromatinScene = {
-        chunks: [chsChunks],
-        models: [],
-      };
-      renderer.addScene(chromatinScene);
+      chromatinScene.chunks.push(stringChunk);
+    }
+    
+    //~ process filepath
+    const structurePath = model.get("structure_path");
+    if (!structurePath) {
+      console.log("invalid path!");
+    }
+    const isPath = (structurePath && structurePath.name != "");
+    if (isPath) {
+      console.log("path was supplied!");
+      const pathChunk = chs.parseXYZ(
+        structurePath.contents,
+        model.get("delimiter"),
+        options,
+      );
+      chromatinScene.chunks.push(pathChunk );
     }
 
+    renderer.addScene(chromatinScene);
     //~ start frame loop (requestAnimationFrame)
     renderer.startDrawing();
 
