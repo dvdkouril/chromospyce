@@ -6,4 +6,5 @@ dist
 __pycache__
 .ipynb_checkpoints
 
-
+# macos
+*.DS_Store
