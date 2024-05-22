@@ -1,5 +1,5 @@
 // @deno-types="npm:chromospace"
-import * as chs from "https://esm.sh/chromospace";
+import * as chs from "https://esm.sh/chromospace@0.0.8";
 //import * as chs from "http://localhost:5173/src/main.ts";
 
 /**
