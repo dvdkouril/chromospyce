@@ -1,6 +1,6 @@
 // @deno-types="npm:chromospace"
-import * as chs from "https://esm.sh/chromospace@0.0.10";
-//import * as chs from "http://localhost:5173/src/main.ts";
+// import * as chs from "https://esm.sh/chromospace@0.0.10";
+import * as chs from "http://localhost:5173/src/main.ts";
 
 /**
  * @typedef TextFile
@@ -29,10 +29,10 @@ export default {
     let chromatinScene = chs.initScene();
 
     //~ this config specifies how the 3D model will look
-    const viewConfig = ({ 
-      binSizeScale: 0.01, 
-      coloring: "constant",
-    });
+    const viewConfig = {
+      binSizeScale: 0.01,
+      color: "#ff00ff",
+    };
 
     //~ process numpy
     const structureNumpy = model.get("structure_nparray");
