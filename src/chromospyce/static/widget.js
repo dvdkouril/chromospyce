@@ -34,8 +34,12 @@ export default {
     };
 
     //~ process input
+    /** @type {DataView} */
     const structure = model.get("structure");
-    const chunk = chs.load(structure, options);
+    if (structure === undefined) {
+      console.error("suplied structure is UNDEFINED");
+    }
+    const chunk = chs.load(structure.buffer, options);
     chromatinScene = chs.addChunkToScene(chromatinScene, chunk, viewConfig);
 
     const [renderer, canvas] = chs.display(chromatinScene, {
