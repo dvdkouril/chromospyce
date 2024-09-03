@@ -5,12 +5,20 @@ build-backend = "hatchling.build"
 [project]
 name = "chromospyce"
 version = "0.0.4"
-dependencies = ["anywidget"]
+dependencies = [
+    "anywidget>=0.9.13",
+]
 readme = "README.md"
+requires-python = ">=3.8"
 
-[project.optional-dependencies]
-dev = ["watchfiles", "jupyterlab"]
+[tool.uv]
+dev-dependencies = [
+    "jupyterlab>=4.2.5",
+    "numpy",
+    "chromospyce",
+    "pyarrow",
+    "watchfiles",
+]
 
-# automatically add the dev feature to the default env (e.g., hatch shell)
-[tool.hatch.envs.default]
-features = ["dev"]
+[tool.uv.sources]
+chromospyce = { workspace = true }
