@@ -28,19 +28,25 @@ export default {
     let chromatinScene = chs.initScene();
 
     //~ this config specifies how the 3D model will look
-    const viewConfig = {
-      binSizeScale: 0.01,
-      color: "#ff00ff",
+    const defaultViewConfig = {
+      scale: 0.02,
+      color: "#ff0066",
+      links: false,
     };
 
     //~ process input
     /** @type {DataView} */
     const structure = model.get("structure");
+    const viewConfig = model.get("viewconfig");
     if (structure === undefined) {
       console.error("suplied structure is UNDEFINED");
     }
+    console.log(viewConfig);
+    const vc = viewConfig === undefined || Object.keys(viewConfig).length === 0
+      ? defaultViewConfig
+      : viewConfig;
     const chunk = chs.load(structure.buffer, options);
-    chromatinScene = chs.addChunkToScene(chromatinScene, chunk, viewConfig);
+    chromatinScene = chs.addChunkToScene(chromatinScene, chunk, vc);
 
     const [renderer, canvas] = chs.display(chromatinScene, {
       alwaysRedraw: false,
