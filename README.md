@@ -4,6 +4,8 @@ This is an [anywidget](https://github.com/manzt/anywidget)-powered version of
 the [chromospace](https://github.com/dvdkouril/chromospace) library intended
 for use in computational notebooks, such as Jupyter Notebook.
 
+![colorful squiggly thick line depicting 3D chromatin running in jupyter notebook](./spyce-teaser.gif)
+
 ## Basic usage
 The available functionality is pretty limited at this moment. We will stabilize the API as we go. At this point, you can display 3D chromatin models.
 
