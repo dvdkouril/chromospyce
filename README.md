@@ -65,3 +65,9 @@ This example is currently a bit verbose to showcase the code for converting
 data from Python arrays to an Apache Arrow table. [Read more about why Apache
 Arrow is the only format supported by
 chromospace/chromospyce](https://github.com/dvdkouril/chromospace/tree/main/docs#data-loading).
+
+Quickly test out **chromospyce** with [uv](https://docs.astral.sh/uv/):
+1. `uv run --with chromospyce --with numpy --with pyarrow --with jupyterlab jupyter lab`
+2. make a new notebook
+3. copy and paste the code above into an empty cell
+
