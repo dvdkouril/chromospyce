@@ -9,51 +9,59 @@ for use in computational notebooks, such as Jupyter Notebook.
 ## Basic usage
 The available functionality is pretty limited at this moment. We will stabilize the API as we go. At this point, you can display 3D chromatin models.
 
-Use case 1: Passing raw numpy array
 ```python
-test_data = make_random_3D_chromatin_structure(n=100)
-data = np.array(test_data)
-chromospyce.Widget(structure_nparray=data.tobytes())
+import random
+import chromospyce
+import numpy as np
+import pyarrow as pa
+
+BINS_NUM = 1000
+
+def make_random_3D_chromatin_structure(n):
+    position = np.array([0.0, 0.0, 0.0])
+    positions = [position.copy()]
+    x_arr = []
+    y_arr = []
+    z_arr = []
+    for _ in range(n):
+        step = np.random.choice([-1.0, 0.0, 1.0], size=3)  # Randomly choose to move left, right, up, down, forward, or backward
+        position += step
+        positions.append(position.copy())
+        x_arr.append(position[0])
+        y_arr.append(position[1])
+        z_arr.append(position[2])
+    return [x_arr, y_arr, z_arr]
+
+# Step 1: Generate random structure and convert from arrays to 
+#         Apache Arrow table with 3 columns: 'x', 'y', 'z'
+random_structure = make_random_3D_chromatin_structure(BINS_NUM)
+table = pa.Table.from_arrays(random_structure, names=["x", "y", "z"])
+
+# Convert the Table to bytes
+output_stream = pa.BufferOutputStream()
+with pa.ipc.RecordBatchStreamWriter(output_stream, table.schema) as writer:
+    writer.write_table(table)
+
+table_bytes = output_stream.getvalue().to_pybytes()
+
+# Step 2: Display the structure in a chromospyce widget
+numbers = list(range(1, BINS_NUM+1))
+vc = {
+    "color": {
+        "values": numbers,
+        "min": 1,
+        "max": BINS_NUM,
+        "colorScale": "Spectral"
+    }, 
+    # "color": "#6600ff", # alternatively
+    "scale": 0.01, 
+    "links": True, 
+    "mark": "sphere"
+}
+chromospyce.Widget(structure=table_bytes, viewconfig=vc)
 ```
-Use case 2: Passing XYZ string
-```python
-test_string = """
-6
-sample = 0
-CA	1.101124	0.547027	-2.299305
-CA	-0.919687	1.275041	-3.201912
-CA	-0.974526	1.144577	-4.491504
-CA	-0.881394	-0.011930	-4.496625
-CA	-0.455539	-2.518781	-2.500660
-CA	-0.626368	-2.086400	-3.427676
-"""
-chromospyce.Widget(structure_string=test_string, delimiter="\t")
-```
 
-Use case 3: Passing XYZ file path
-```python
-import pathlib
-test_path = pathlib.Path("./sample_data/test.xyz")
-chromospyce.Widget(structure_path=test_path, delimiter="\t")
-```
-
-## Installation
-
-```sh
-pip install chromospyce
-```
-
-## Development installation
-
-Create a virtual environment and and install chromospyce in _editable_ mode with
-the optional development dependencies:
-
-```sh
-python -m venv .venv
-source .venv/bin/activate
-pip install -e ".[dev]"
-```
-
-All is set to open `example.ipynb` in JupyterLab, VS Code, or your favorite
-editor to start developing. Any change made in the `src/chromospyce/static`
-folder will be directly reflected in the notebook.
+This example is currently a bit verbose to showcase the code for converting
+data from Python arrays to an Apache Arrow table. [Read more about why Apache
+Arrow is the only format supported by
+chromospace/chromospyce](https://github.com/dvdkouril/chromospace/tree/main/docs#data-loading).
