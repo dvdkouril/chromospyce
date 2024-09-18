@@ -19,14 +19,12 @@ BINS_NUM = 1000
 
 def make_random_3D_chromatin_structure(n):
     position = np.array([0.0, 0.0, 0.0])
-    positions = [position.copy()]
     x_arr = []
     y_arr = []
     z_arr = []
     for _ in range(n):
         step = np.random.choice([-1.0, 0.0, 1.0], size=3)  # Randomly choose to move left, right, up, down, forward, or backward
         position += step
-        positions.append(position.copy())
         x_arr.append(position[0])
         y_arr.append(position[1])
         z_arr.append(position[2])
@@ -71,3 +69,4 @@ Quickly test out **chromospyce** with [uv](https://docs.astral.sh/uv/):
 2. make a new notebook
 3. copy and paste the code above into an empty cell
 
+Or: [run the example in Google Colab](https://colab.research.google.com/drive/1EZh9HcGS3cgPF4C6eFyMm5iHGVGS4Cj_?usp=sharing).
