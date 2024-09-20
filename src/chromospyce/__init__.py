@@ -4,6 +4,10 @@ import pathlib
 import anywidget
 import traitlets
 
+import numpy as np
+import pandas as pd
+import pyarrow as pa
+
 try:
     __version__ = importlib.metadata.version("chromospyce")
 except importlib.metadata.PackageNotFoundError:
@@ -17,8 +21,12 @@ def from_numpy(nparr):
     xyz = nparr
     # Convert numpy array to pandas dataframe
     xyzDF = pd.DataFrame({'x': xyz[:, 0], 'y': xyz[:, 1], 'z': xyz[:, 2]})
+
+    return from_pandas_dataframe(xyzDF)
+
+def from_pandas_dataframe(df):
     # Convert pandas DF to Arrow Table
-    xyzArrowTable = pa.Table.from_pandas(xyzDF)
+    xyzArrowTable = pa.Table.from_pandas(df)
     # Convert the Table to bytes
     output_stream = pa.BufferOutputStream()
     with pa.ipc.RecordBatchStreamWriter(output_stream, xyzArrowTable.schema) as writer:
@@ -36,3 +44,20 @@ class Widget(anywidget.AnyWidget):
     structure = traitlets.Bytes().tag(sync=True)
     # ViewConfig: defines how the 3D structure will be shown
     viewconfig = traitlets.Dict().tag(sync=True)
+
+    def __init__(self, structure, viewconfig):
+        """
+        What types of data we expect:
+        - 2D numpy array: [[x, y, z], ...]
+        - pandas dataframe: columns need to be 'x', 'y', 'z'
+        """
+        if isinstance(structure, np.ndarray):
+            # is a numpy array
+            super().__init__(structure=from_numpy(structure), viewconfig=viewconfig)
+        elif isinstance(structure, pd.DataFrame):
+            # is a pandas dataframe
+            super().__init__(structure=from_pandas_dataframe(structure), viewconfig=viewconfig)
+        else:
+            # is something else (assume Arrow as Bytes)
+            super().__init__(structure=structure, viewconfig=viewconfig)
+
