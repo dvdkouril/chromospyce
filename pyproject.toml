@@ -21,6 +21,7 @@ dev-dependencies = [
     "chromospyce",
     "pyarrow",
     "watchfiles",
+    "nbconvert",
 ]
 
 [tool.uv.sources]

@@ -346,7 +346,7 @@ wheels = [
 
 [[package]]
 name = "chromospyce"
-version = "0.0.5"
+version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "anywidget" },
@@ -358,6 +358,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "jupyterlab" },
+    { name = "nbconvert" },
     { name = "numpy" },
     { name = "pyarrow" },
     { name = "watchfiles" },
@@ -375,6 +376,7 @@ requires-dist = [
 dev = [
     { name = "chromospyce", editable = "." },
     { name = "jupyterlab", specifier = ">=4.2.5" },
+    { name = "nbconvert" },
     { name = "numpy" },
     { name = "pyarrow" },
     { name = "watchfiles" },

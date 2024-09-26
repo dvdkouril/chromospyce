@@ -45,7 +45,7 @@ class Widget(anywidget.AnyWidget):
     # ViewConfig: defines how the 3D structure will be shown
     viewconfig = traitlets.Dict().tag(sync=True)
 
-    def __init__(self, structure, viewconfig):
+    def __init__(self, structure, viewconfig={}):
         """
         What types of data we expect:
         - 2D numpy array: [[x, y, z], ...]
