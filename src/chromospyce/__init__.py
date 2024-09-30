@@ -18,7 +18,7 @@ def from_numpy(nparr):
     """
     This assumes `nparr` is a two-dimensional numpy array with xyz coordinates: [[x,y,z], ...]
     """
-    xyz = nparr
+    xyz = nparr.astype(np.float32)
     # Convert numpy array to pandas dataframe
     xyzDF = pd.DataFrame({'x': xyz[:, 0], 'y': xyz[:, 1], 'z': xyz[:, 2]})
 
